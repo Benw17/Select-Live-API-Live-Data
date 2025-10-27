@@ -8,7 +8,7 @@ A command-line Python tool that authenticates with the Select Live Solar platfor
 - Persists cookies and session for subsequent requests
 - Retrieves the user’s systems list for solar monitoring
 
-## Future Plans
+## Usage
 ```bash
 python select_live.py secrets.txt
 ```
