@@ -15,4 +15,5 @@ python select_live.py secrets.txt
 
 ## Future Plans
 
-- I plan on adding a loop function to loop and return a live update, taking a numerical value as an arguement for the length of time.
+- I thought about adding in an SMS Gateway to send users important updates directly via Text. 
+Things such as offline, battery is at a certain percentage.
