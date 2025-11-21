@@ -1,6 +1,7 @@
 import requests
 import argparse
 import sys
+import time
 
 def ensure_login_details(infile):
     # Read login details from the provided file.
@@ -46,6 +47,14 @@ def main():
         help='This program requireds a file containing your login details as email and password variables.'
     )
     
+    parser.add_argument(
+        'count',
+        metavar='[Number of Updates]',
+        type=int,
+        default=1,
+        help='Number of times to return updates from Select Live.'
+    )
+
     args = parser.parse_args()
 
     try:
@@ -53,19 +62,23 @@ def main():
         email, password = ensure_login_details(args.infile)
 
         # Make login request to obtain user cookie.
-        user_cke = make_login_request(email, password)
+        user_cookie = make_login_request(email, password)
 
-        # Use the cookie to access the systems list.
-        response = requests.get('https://select.live/systems/list', headers={
-            'Cookie': user_cke,
-            'Referer' :'https://select.live/myprofile',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-            'Host' : 'select.live',
-        })
+        for _ in range(args.count):
+            # Use the cookie to access the systems list.
+            response = requests.get('https://select.live/systems/list', headers={
+                'Cookie': user_cookie,
+                'Referer' :'https://select.live/myprofile',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+                'Host' : 'select.live',
+            })
 
-        if response.status_code == 200:
-            print("Successfully accessed the systems list.")
-            print(response.text)
+            if response.status_code == 200:
+                print("Successfully accessed the systems list.")
+                print(response.text)
+
+            # Select Live only updates every 5 seconds so it's pointless to request data more frequently.
+            time.sleep(5)
 
     except KeyError as e:
         print(f"Error: {e}")
@@ -74,7 +87,7 @@ def main():
         print(f"Unexpected error occured: {e}")
         sys.exit(2)
     finally:
-    # Close file before concluding program.
+    # Close file
         args.infile.close()
     
 
