@@ -1,5 +1,22 @@
-venv/
-DS_Store
+# Python
 __pycache__/
 *.pyc
-.gitignore
+
+# Virtual environments
+venv/
+env/
+
+# macOS Finder files
+.DS_Store
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
